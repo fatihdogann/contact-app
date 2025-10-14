@@ -5,6 +5,9 @@ const contactController = require('../controllers/contactController');
 // Tüm kişileri getir
 router.get('/', contactController.getAllContacts);
 
+// Arama yap (önce tanımla: '/:id' ile çakışmasın)
+router.get('/search', contactController.searchContacts);
+
 // ID'ye göre kişi getir
 router.get('/:id', contactController.getContactById);
 
@@ -16,8 +19,5 @@ router.put('/:id', contactController.updateContact);
 
 // Kişi sil
 router.delete('/:id', contactController.deleteContact);
-
-// Arama yap
-router.get('/search', contactController.searchContacts);
 
 module.exports = router;
