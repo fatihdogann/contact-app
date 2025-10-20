@@ -4,3 +4,16 @@ node_modules/
 Thumbs.db
 # runtime local data
 /data/contacts.json
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+build/
+dist/
+logs/
+*.log
+coverage/
+.nyc_output/
