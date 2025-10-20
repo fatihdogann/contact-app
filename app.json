@@ -1,0 +1,35 @@
+{
+  "name": "Contact App",
+  "description": "A simple contact management application built with Node.js, Express, and MySQL",
+  "repository": "https://github.com/fatihdogann/contact-app",
+  "logo": "https://cdn.jsdelivr.net/npm/@heroicons/outline@1.1.0/src/outline/user-group.svg",
+  "keywords": ["node", "express", "mysql", "contacts", "api"],
+  "env": {
+    "DB_HOST": {
+      "description": "Database host address",
+      "value": "localhost"
+    },
+    "DB_USER": {
+      "description": "Database user",
+      "value": "root"
+    },
+    "DB_PASSWORD": {
+      "description": "Database password",
+      "value": ""
+    },
+    "DB_NAME": {
+      "description": "Database name",
+      "value": "contact_db"
+    },
+    "NODE_ENV": {
+      "description": "Application environment",
+      "value": "production"
+    }
+  },
+  "scripts": {
+    "postdeploy": "npm run sync-db"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
