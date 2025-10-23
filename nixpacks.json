@@ -1,34 +1,9 @@
 {
   "phases": {
-    "setup": {
-      "nixPkgs": [
-        "nodejs_18_x",
-        "npm",
-        "python3",
-        "gcc",
-        "g++",
-        "make",
-        "sqlite"
-      ],
-      "aptPkgs": [
-        "build-essential",
-        "python3",
-        "gcc",
-        "g++",
-        "make",
-        "libsqlite3-dev",
-        "pkg-config"
-      ]
-    },
     "install": {
       "cmds": [
         "npm set progress=false",
         "npm ci --only=production --no-audit --no-fund"
-      ]
-    },
-    "build": {
-      "cmds": [
-        "npm run sync-db || echo 'Database sync failed, continuing...'"
       ]
     }
   },
