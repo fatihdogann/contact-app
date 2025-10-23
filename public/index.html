@@ -1,413 +1,81 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rehber Uygulaması</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .header {
-            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
-            color: white;
-            padding: 1rem 0;
-            margin-bottom: 2rem;
-        }
-        .contact-card {
-            transition: transform 0.2s;
-            border-left: 4px solid #6c5ce7;
-        }
-        .contact-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        .search-container {
-            background-color: white;
-            border-radius: 30px;
-            padding: 10px 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rehber</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; font-src 'self' https://cdn.jsdelivr.net; img-src 'self' data:; script-src 'self'">
 </head>
 <body>
-    <div class="header">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <h1><i class="bi bi-people-fill"></i> Rehber Uygulaması</h1>
-                    <p class="lead">Kişilerinizi yönetin</p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#addContactModal">
-                        <i class="bi bi-person-plus-fill"></i> Yeni Kişi Ekle
-                    </button>
-                </div>
-            </div>
+  <header class="header">
+    <h1><i class="bi bi-people"></i> Rehber</h1>
+  </header>
+
+  <main class="container">
+    <section class="panel">
+      <h2>Yeni / Düzenle</h2>
+      <form id="contact-form">
+        <input type="hidden" id="contact-id" />
+        <div class="row">
+          <label for="firstName">Ad</label>
+          <input id="firstName" autocomplete="off" placeholder="Ad" required />
         </div>
+        <div class="row">
+          <label for="lastName">Soyad</label>
+          <input id="lastName" autocomplete="off" placeholder="Soyad" required />
+        </div>
+        <div class="row">
+          <label for="phone">Telefon</label>
+          <input id="phone" inputmode="numeric" autocomplete="off" placeholder="0xxx xxx xx xx" required />
+        </div>
+        <div class="hint" id="phone-hint">Sadece rakam giriniz. TR numarası olmalıdır.</div>
+        <div class="actions">
+          <button id="save-btn" type="submit" title="Kaydet" aria-label="Kaydet">
+            <i class="bi bi-floppy2"></i>
+          </button>
+          <button id="cancel-btn" type="button" class="secondary" title="İptal" aria-label="İptal">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Rehber <span id="count-badge" class="count-badge">0</span></h2>
+      </div>
+      <div class="row">
+        <label for="search">Ara</label>
+        <div class="input-wrap">
+          <i class="bi bi-search leading-icon" aria-hidden="true"></i>
+          <input id="search" placeholder="Ad, soyad veya telefon" />
+          <button id="clear-search" class="ghost" title="Temizle" aria-label="Temizle">
+            <i class="bi bi-x-circle"></i>
+          </button>
+        </div>
+      </div>
+      <table id="contacts-table">
+        <thead>
+          <tr>
+            <th>Ad</th>
+            <th>Soyad</th>
+            <th>Telefon</th>
+            <th>İşlemler</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>© <span id="year"></span> Mehmet Fatih Doğan — Rehber Uygulaması</span>
     </div>
+  </footer>
 
-    <div class="container">
-        <!-- Arama Çubuğu -->
-        <div class="search-container mb-4">
-            <div class="input-group">
-                <span class="input-group-text bg-transparent border-0">
-                    <i class="bi bi-search"></i>
-                </span>
-                <input type="text" id="searchInput" class="form-control border-0" placeholder="İsim, soyisim veya telefon numarası ara...">
-                <button class="btn btn-outline-secondary border-0" type="button" id="clearSearch">
-                    <i class="bi bi-x"></i>
-                </button>
-            </div>
-        </div>
-
-        <!-- Kişiler Listesi -->
-        <div id="contactsList" class="row">
-            <!-- Kişiler burada listelenecek -->
-        </div>
-
-        <!-- Yükleniyor Mesajı -->
-        <div id="loading" class="text-center py-5">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Yükleniyor...</span>
-            </div>
-        </div>
-
-        <!-- Boş Liste Mesajı -->
-        <div id="noContacts" class="text-center py-5 d-none">
-            <i class="bi bi-person-lines-fill" style="font-size: 3rem; color: #ccc;"></i>
-            <h3 class="mt-3">Rehberiniz boş</h3>
-            <p>Yeni bir kişi ekleyerek başlayın</p>
-        </div>
-    </div>
-
-    <!-- Yeni Kişi Ekle Modal -->
-    <div class="modal fade" id="addContactModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Yeni Kişi Ekle</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="addContactForm">
-                        <div class="mb-3">
-                            <label for="firstName" class="form-label">Ad</label>
-                            <input type="text" class="form-control" id="firstName" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="lastName" class="form-label">Soyad</label>
-                            <input type="text" class="form-control" id="lastName" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="phone" class="form-label">Telefon</label>
-                            <input type="tel" class="form-control" id="phone" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">E-posta (İsteğe bağlı)</label>
-                            <input type="email" class="form-control" id="email">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                    <button type="button" class="btn btn-primary" id="saveContactBtn">Kaydet</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Kişi Düzenle Modal -->
-    <div class="modal fade" id="editContactModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Kişiyi Düzenle</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editContactForm">
-                        <input type="hidden" id="editContactId">
-                        <div class="mb-3">
-                            <label for="editFirstName" class="form-label">Ad</label>
-                            <input type="text" class="form-control" id="editFirstName" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editLastName" class="form-label">Soyad</label>
-                            <input type="text" class="form-control" id="editLastName" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editPhone" class="form-label">Telefon</label>
-                            <input type="tel" class="form-control" id="editPhone" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editEmail" class="form-label">E-posta (İsteğe bağlı)</label>
-                            <input type="email" class="form-control" id="editEmail">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                    <button type="button" class="btn btn-primary" id="updateContactBtn">Güncelle</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Global değişkenler
-        const API_BASE = '/api/contacts';
-        let contacts = [];
-
-        // DOM elementleri
-        const contactsList = document.getElementById('contactsList');
-        const loading = document.getElementById('loading');
-        const noContacts = document.getElementById('noContacts');
-        const searchInput = document.getElementById('searchInput');
-        const clearSearch = document.getElementById('clearSearch');
-
-        // Sayfa yüklendiğinde kişileri getir
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchContacts();
-            
-            // Olay dinleyicileri
-            document.getElementById('saveContactBtn').addEventListener('click', saveContact);
-            document.getElementById('updateContactBtn').addEventListener('click', updateContact);
-            searchInput.addEventListener('input', handleSearch);
-            clearSearch.addEventListener('click', clearSearchInput);
-        });
-
-        // Kişileri API'den getir
-        async function fetchContacts() {
-            try {
-                showLoading();
-                const response = await fetch(API_BASE);
-                contacts = await response.json();
-                renderContacts(contacts);
-            } catch (error) {
-                console.error('Kişiler getirilirken hata oluştu:', error);
-                showError('Kişiler yüklenirken bir hata oluştu');
-            }
-        }
-
-        // Kişileri ekrana render et
-        function renderContacts(contactsToRender) {
-            hideLoading();
-            
-            if (contactsToRender.length === 0) {
-                showNoContacts();
-                return;
-            }
-            
-            hideNoContacts();
-            
-            contactsList.innerHTML = contactsToRender.map(contact => `
-                <div class="col-md-6 col-lg-4 mb-3">
-                    <div class="card contact-card">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <h5 class="card-title">${contact.firstName} ${contact.lastName}</h5>
-                                <div>
-                                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editContact(${contact.id})">
-                                        <i class="bi bi-pencil"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-danger" onclick="deleteContact(${contact.id})">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <p class="card-text">
-                                <i class="bi bi-telephone-fill text-primary"></i> ${contact.phone}<br>
-                                ${contact.email ? `<i class="bi bi-envelope-fill text-primary"></i> ${contact.email}` : ''}
-                            </p>
-                            <small class="text-muted">Eklenme: ${new Date(contact.createdAt).toLocaleDateString('tr-TR')}</small>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Yeni kişi ekle
-        async function saveContact() {
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const phone = document.getElementById('phone').value;
-            const email = document.getElementById('email').value;
-            
-            if (!firstName || !lastName || !phone) {
-                alert('Lütfen tüm zorunlu alanları doldurun');
-                return;
-            }
-            
-            try {
-                const response = await fetch(API_BASE, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ firstName, lastName, phone, email })
-                });
-                
-                if (response.ok) {
-                    const newContact = await response.json();
-                    contacts.unshift(newContact);
-                    renderContacts(contacts);
-                    document.getElementById('addContactForm').reset();
-                    bootstrap.Modal.getInstance(document.getElementById('addContactModal')).hide();
-                    showSuccess('Kişi başarıyla eklendi');
-                } else {
-                    const error = await response.json();
-                    showError(error.error || 'Kişi eklenirken hata oluştu');
-                }
-            } catch (error) {
-                console.error('Kişi eklenirken hata oluştu:', error);
-                showError('Kişi eklenirken bir hata oluştu');
-            }
-        }
-
-        // Kişi düzenle
-        function editContact(id) {
-            const contact = contacts.find(c => c.id === id);
-            if (contact) {
-                document.getElementById('editContactId').value = contact.id;
-                document.getElementById('editFirstName').value = contact.firstName;
-                document.getElementById('editLastName').value = contact.lastName;
-                document.getElementById('editPhone').value = contact.phone;
-                document.getElementById('editEmail').value = contact.email || '';
-                
-                const editModal = new bootstrap.Modal(document.getElementById('editContactModal'));
-                editModal.show();
-            }
-        }
-
-        // Kişi güncelle
-        async function updateContact() {
-            const id = document.getElementById('editContactId').value;
-            const firstName = document.getElementById('editFirstName').value;
-            const lastName = document.getElementById('editLastName').value;
-            const phone = document.getElementById('editPhone').value;
-            const email = document.getElementById('editEmail').value;
-            
-            if (!firstName || !lastName || !phone) {
-                alert('Lütfen tüm zorunlu alanları doldurun');
-                return;
-            }
-            
-            try {
-                const response = await fetch(`${API_BASE}/${id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ firstName, lastName, phone, email })
-                });
-                
-                if (response.ok) {
-                    const updatedContact = await response.json();
-                    const index = contacts.findIndex(c => c.id === id);
-                    if (index !== -1) {
-                        contacts[index] = updatedContact;
-                        renderContacts(contacts);
-                    }
-                    bootstrap.Modal.getInstance(document.getElementById('editContactModal')).hide();
-                    showSuccess('Kişi başarıyla güncellendi');
-                } else {
-                    const error = await response.json();
-                    showError(error.error || 'Kişi güncellenirken hata oluştu');
-                }
-            } catch (error) {
-                console.error('Kişi güncellenirken hata oluştu:', error);
-                showError('Kişi güncellenirken bir hata oluştu');
-            }
-        }
-
-        // Kişi sil
-        async function deleteContact(id) {
-            if (!confirm('Bu kişiyi silmek istediğinize emin misiniz?')) {
-                return;
-            }
-            
-            try {
-                const response = await fetch(`${API_BASE}/${id}`, {
-                    method: 'DELETE'
-                });
-                
-                if (response.ok) {
-                    contacts = contacts.filter(c => c.id !== id);
-                    renderContacts(contacts);
-                    showSuccess('Kişi başarıyla silindi');
-                } else {
-                    const error = await response.json();
-                    showError(error.error || 'Kişi silinirken hata oluştu');
-                }
-            } catch (error) {
-                console.error('Kişi silinirken hata oluştu:', error);
-                showError('Kişi silinirken bir hata oluştu');
-            }
-        }
-
-        // Arama işlemi
-        async function handleSearch() {
-            const query = searchInput.value.trim();
-            
-            if (query === '') {
-                renderContacts(contacts);
-                return;
-            }
-            
-            try {
-                showLoading();
-                const response = await fetch(`${API_BASE}/search?q=${encodeURIComponent(query)}`);
-                const results = await response.json();
-                renderContacts(results);
-            } catch (error) {
-                console.error('Arama yapılırken hata oluştu:', error);
-                showError('Arama yapılırken bir hata oluştu');
-            }
-        }
-
-        // Arama inputunu temizle
-        function clearSearchInput() {
-            searchInput.value = '';
-            renderContacts(contacts);
-        }
-
-        // Yardımcı fonksiyonlar
-        function showLoading() {
-            loading.classList.remove('d-none');
-            contactsList.classList.add('d-none');
-            noContacts.classList.add('d-none');
-        }
-
-        function hideLoading() {
-            loading.classList.add('d-none');
-            contactsList.classList.remove('d-none');
-        }
-
-        function showNoContacts() {
-            noContacts.classList.remove('d-none');
-            contactsList.classList.add('d-none');
-        }
-
-        function hideNoContacts() {
-            noContacts.classList.add('d-none');
-            contactsList.classList.remove('d-none');
-        }
-
-        function showSuccess(message) {
-            alert(message); // Basit bir alert, daha gelişmiş bir bildirim sistemi eklenebilir
-        }
-
-        function showError(message) {
-            alert('Hata: ' + message); // Basit bir alert, daha gelişmiş bir bildirim sistemi eklenebilir
-        }
-    </script>
-    
-    <footer class="text-center mt-5 p-3 bg-light">
-        <small>&copy; 2025 Rehber Uygulaması - Mehmet Fatih Doğan</small>
-    </footer>
+  <script src="app.js"></script>
 </body>
 </html>

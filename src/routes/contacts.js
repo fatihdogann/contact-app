@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const store = require('../db/contactsStore');
+const { isValidName, normalizePhoneTr } = require('../utils/validators');
 
 // GET /api/contacts - list all
 router.get('/', async (req, res) => {
@@ -44,7 +45,17 @@ router.post('/', async (req, res) => {
     if (!firstName || !lastName || !phone) {
       return res.status(400).json({ error: 'firstName, lastName and phone are required' });
     }
-    const created = await store.add({ firstName, lastName, phone });
+    if (!isValidName(firstName)) {
+      return res.status(400).json({ error: 'Invalid firstName: only letters allowed' });
+    }
+    if (!isValidName(lastName)) {
+      return res.status(400).json({ error: 'Invalid lastName: only letters allowed' });
+    }
+    const normalized = normalizePhoneTr(phone);
+    if (!normalized) {
+      return res.status(400).json({ error: 'Invalid Turkish phone number' });
+    }
+    const created = await store.add({ firstName: firstName.trim(), lastName: lastName.trim(), phone: normalized });
     res.status(201).json(created);
   } catch (err) {
     console.error(err);
@@ -59,7 +70,27 @@ router.put('/:id', async (req, res) => {
     if (!firstName && !lastName && !phone) {
       return res.status(400).json({ error: 'Provide at least one of firstName, lastName, phone' });
     }
-    const updated = await store.update(req.params.id, { firstName, lastName, phone });
+    const payload = {};
+    if (firstName !== undefined) {
+      if (!isValidName(firstName)) {
+        return res.status(400).json({ error: 'Invalid firstName: only letters allowed' });
+      }
+      payload.firstName = firstName.trim();
+    }
+    if (lastName !== undefined) {
+      if (!isValidName(lastName)) {
+        return res.status(400).json({ error: 'Invalid lastName: only letters allowed' });
+      }
+      payload.lastName = lastName.trim();
+    }
+    if (phone !== undefined) {
+      const normalized = normalizePhoneTr(phone);
+      if (!normalized) {
+        return res.status(400).json({ error: 'Invalid Turkish phone number' });
+      }
+      payload.phone = normalized;
+    }
+    const updated = await store.update(req.params.id, payload);
     if (!updated) return res.status(404).json({ error: 'Not found' });
     res.json(updated);
   } catch (err) {
