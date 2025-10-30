@@ -1,0 +1,34 @@
+[
+  {
+    "id": "cfb2dc47-7358-477b-b764-f7af4bea35c3",
+    "fullName": "Admin User",
+    "phone": "05551234567",
+    "email": "admin@rehber.com",
+    "password": "$2b$10$2fSK2g73wI4MnBbJvLpfW.JtTSFrUe.e3Y62P8jXnlGqBVzF2OGJm",
+    "age": 30,
+    "province": "İstanbul",
+    "district": "Kadıköy",
+    "gender": "Erkek",
+    "additionalInfo": "Test admin kullanıcısı",
+    "role": "admin",
+    "approved": true,
+    "createdAt": "2025-10-30T20:02:05.553Z",
+    "updatedAt": "2025-10-30T20:02:05.566Z"
+  },
+  {
+    "id": "7295c833-1713-420a-b25d-0c82f2e6376d",
+    "fullName": "Mehmet Fatih Doğan",
+    "phone": "05525763894",
+    "email": "mehmetfatihdogann5@gmail.com",
+    "password": "$2b$10$rH1TGUBKpJVr6nf9ALrrouev9XLeDxaUSdW/IuGn5xk7cElrDMWRS",
+    "age": 21,
+    "province": "Aksaray",
+    "district": "Merkez",
+    "gender": "Erkek",
+    "additionalInfo": null,
+    "role": "user",
+    "approved": true,
+    "createdAt": "2025-10-30T20:12:31.197Z",
+    "updatedAt": "2025-10-30T20:15:56.597Z"
+  }
+]

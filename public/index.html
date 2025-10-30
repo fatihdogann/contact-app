@@ -3,78 +3,437 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rehber</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>Rehber Uygulaması</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; font-src 'self' https://cdn.jsdelivr.net; img-src 'self' data:; script-src 'self'">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#42a7f0",
+            "background-light": "#f6f7f8",
+            "background-dark": "#101a22",
+            "card-light": "#ffffff",
+            "card-dark": "#1a2732",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+        },
+      },
+    }
+  </script>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdn.tailwindcss.com 'unsafe-inline'; font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com; img-src 'self' data:; script-src 'self' https://cdn.tailwindcss.com 'unsafe-inline'">
 </head>
-<body>
-  <header class="header">
-    <h1><i class="bi bi-people"></i> Rehber</h1>
-  </header>
+<body class="bg-background-light dark:bg-background-dark font-display">
+  
+  <!-- Login/Register Screen -->
+  <div id="auth-screen" style="display: none;">
+    <div class="relative flex min-h-screen w-full flex-col items-center justify-center overflow-x-hidden p-4">
+      <div class="w-full max-w-md rounded-xl bg-white dark:bg-slate-900 shadow-lg p-8">
+        
+        <!-- Login Panel -->
+        <div id="login-panel">
+          <div class="flex flex-col items-center mb-8">
+            <div class="p-3 bg-primary/20 rounded-full mb-4">
+              <i class="bi bi-people text-primary text-4xl"></i>
+            </div>
+            <h1 class="text-3xl font-black tracking-tighter text-slate-900 dark:text-white">Hesabınıza Giriş Yapın</h1>
+            <p class="text-slate-500 dark:text-slate-400 mt-2">Rehberinize erişmek için devam edin.</p>
+          </div>
+          
+          <form id="login-form" class="flex flex-col gap-5">
+            <label class="flex flex-col w-full">
+              <p class="text-slate-900 dark:text-slate-200 text-base font-medium leading-normal pb-2">E-posta</p>
+              <div class="flex w-full flex-1 items-stretch rounded-lg">
+                <input 
+                  id="login-email" 
+                  type="email" 
+                  autocomplete="email"
+                  class="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-l-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-background-light dark:bg-background-dark focus:border-primary/50 h-14 placeholder:text-slate-400 dark:placeholder:text-slate-500 p-4 text-base font-normal leading-normal" 
+                  placeholder="ornek@email.com" 
+                  required 
+                />
+                <div class="text-slate-400 dark:text-slate-400 flex border border-slate-300 dark:border-slate-700 bg-background-light dark:bg-background-dark items-center justify-center px-4 rounded-r-lg border-l-0">
+                  <i class="bi bi-envelope"></i>
+                </div>
+              </div>
+            </label>
+            
+            <label class="flex flex-col w-full">
+              <p class="text-slate-900 dark:text-slate-200 text-base font-medium leading-normal pb-2">Şifre</p>
+              <div class="flex w-full flex-1 items-stretch rounded-lg">
+                <input 
+                  id="login-password" 
+                  type="password" 
+                  autocomplete="current-password"
+                  class="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-l-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-background-light dark:bg-background-dark focus:border-primary/50 h-14 placeholder:text-slate-400 dark:placeholder:text-slate-500 p-4 text-base font-normal leading-normal" 
+                  placeholder="Şifrenizi girin" 
+                  required 
+                />
+                <div class="text-slate-400 dark:text-slate-400 flex border border-slate-300 dark:border-slate-700 bg-background-light dark:bg-background-dark items-center justify-center px-4 rounded-r-lg border-l-0">
+                  <i class="bi bi-lock"></i>
+                </div>
+              </div>
+            </label>
+            
+            <button type="submit" class="flex min-w-[84px] w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-slate-900 transition-colors duration-200">
+              <span class="truncate">Giriş Yap</span>
+            </button>
+          </form>
+          
+          <div class="mt-8 text-center">
+            <p class="text-sm text-slate-500 dark:text-slate-400">
+              Hesabın yok mu? <a id="show-register-btn" class="font-medium text-primary hover:text-primary/80 underline cursor-pointer">Kayıt Ol</a>
+            </p>
+          </div>
+        </div>
 
-  <main class="container">
-    <section class="panel">
-      <h2>Yeni / Düzenle</h2>
-      <form id="contact-form">
-        <input type="hidden" id="contact-id" />
-        <div class="row">
-          <label for="firstName">Ad</label>
-          <input id="firstName" autocomplete="off" placeholder="Ad" required />
-        </div>
-        <div class="row">
-          <label for="lastName">Soyad</label>
-          <input id="lastName" autocomplete="off" placeholder="Soyad" required />
-        </div>
-        <div class="row">
-          <label for="phone">Telefon</label>
-          <input id="phone" inputmode="numeric" autocomplete="off" placeholder="0xxx xxx xx xx" required />
-        </div>
-        <div class="hint" id="phone-hint">Sadece rakam giriniz. TR numarası olmalıdır.</div>
-        <div class="actions">
-          <button id="save-btn" type="submit" title="Kaydet" aria-label="Kaydet">
-            <i class="bi bi-floppy2"></i>
-          </button>
-          <button id="cancel-btn" type="button" class="secondary" title="İptal" aria-label="İptal">
-            <i class="bi bi-x-lg"></i>
-          </button>
-        </div>
-      </form>
-    </section>
+        <!-- Register Panel -->
+        <div id="register-panel" style="display: none;">
+          <div class="flex flex-col items-center mb-8">
+            <div class="bg-primary/20 dark:bg-primary/30 p-3 rounded-xl mb-4">
+              <i class="bi bi-person-plus text-primary text-4xl"></i>
+            </div>
+            <h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Yeni Hesap Oluştur</h1>
+            <p class="text-slate-500 dark:text-slate-400 mt-2">Rehber uygulamasına hoş geldiniz.</p>
+          </div>
+          
+          <form id="register-form" class="flex flex-col gap-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div class="flex flex-col">
+                <label class="text-base font-medium pb-2 text-slate-900 dark:text-white" for="reg-fullname">Ad Soyad</label>
+                <input id="reg-fullname" autocomplete="name" class="form-input h-12 w-full rounded-lg border border-slate-300 bg-background-light p-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-background-dark dark:text-white dark:placeholder:text-slate-500" placeholder="Ad Soyad" required />
+              </div>
+              <div class="flex flex-col">
+                <label class="text-base font-medium pb-2 text-slate-900 dark:text-white" for="reg-phone">Telefon</label>
+                <input id="reg-phone" inputmode="tel" autocomplete="tel" class="form-input h-12 w-full rounded-lg border border-slate-300 bg-background-light p-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-background-dark dark:text-white dark:placeholder:text-slate-500" placeholder="05xx xxx xx xx" required />
+              </div>
+            </div>
 
-    <section class="panel">
-      <div class="panel-head">
-        <h2>Rehber <span id="count-badge" class="count-badge">0</span></h2>
+            <div class="flex flex-col">
+              <label class="text-base font-medium pb-2 text-slate-900 dark:text-white" for="reg-email">E-posta</label>
+              <input id="reg-email" type="email" autocomplete="email" class="form-input h-12 w-full rounded-lg border border-slate-300 bg-background-light p-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-background-dark dark:text-white dark:placeholder:text-slate-500" placeholder="ornek@email.com" required />
+            </div>
+
+            <div class="flex flex-col">
+              <label class="text-base font-medium pb-2 text-slate-900 dark:text-white" for="reg-password">Şifre</label>
+              <input id="reg-password" type="password" autocomplete="new-password" class="form-input h-12 w-full rounded-lg border border-slate-300 bg-background-light p-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-background-dark dark:text-white dark:placeholder:text-slate-500" placeholder="En az 6 karakter" required />
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div class="flex flex-col">
+                <label class="text-base font-medium pb-2 text-slate-900 dark:text-white" for="reg-age">Yaş</label>
+                <input id="reg-age" type="number" min="1" max="120" class="form-input h-12 w-full rounded-lg border border-slate-300 bg-background-light p-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-background-dark dark:text-white dark:placeholder:text-slate-500" placeholder="Yaş" required />
+              </div>
+              <div class="flex flex-col">
+                <label class="text-base font-medium pb-2 text-slate-900 dark:text-white" for="reg-gender">Cinsiyet</label>
+                <select id="reg-gender" class="form-select h-12 w-full rounded-lg border border-slate-300 bg-background-light p-3 text-base text-slate-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-background-dark dark:text-white">
+                  <option value="">Seçiniz</option>
+                  <option value="Erkek">Erkek</option>
+                  <option value="Kadın">Kadın</option>
+                  <option value="Diğer">Diğer</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div class="flex flex-col">
+                <label class="text-base font-medium pb-2 text-slate-900 dark:text-white" for="reg-province">İl</label>
+                <select id="reg-province" class="form-select h-12 w-full rounded-lg border border-slate-300 bg-background-light p-3 text-base text-slate-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-background-dark dark:text-white" required>
+                  <option value="">İl Seçiniz</option>
+                </select>
+              </div>
+              <div class="flex flex-col">
+                <label class="text-base font-medium pb-2 text-slate-900 dark:text-white" for="reg-district">İlçe</label>
+                <select id="reg-district" class="form-select h-12 w-full rounded-lg border border-slate-300 bg-background-light p-3 text-base text-slate-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-background-dark dark:text-white" required>
+                  <option value="">Önce İl Seçiniz</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="flex flex-col">
+              <label class="text-base font-medium pb-2 text-slate-900 dark:text-white" for="captcha-answer">Güvenlik: <span id="captcha-question" class="font-bold text-primary"></span></label>
+              <input id="captcha-answer" type="number" class="form-input h-12 w-full rounded-lg border border-slate-300 bg-background-light p-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-background-dark dark:text-white dark:placeholder:text-slate-500" placeholder="Cevabı girin" required />
+            </div>
+
+            <p class="text-xs font-normal text-slate-500 dark:text-slate-400">Kayıt olarak <a class="font-medium text-primary hover:underline" href="#">Kullanım Koşulları</a>'nı kabul etmiş olursunuz.</p>
+
+            <button type="submit" class="flex h-12 w-full cursor-pointer items-center justify-center rounded-lg bg-primary px-5 text-base font-bold text-white transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-slate-900">
+              <span>Kayıt Ol</span>
+            </button>
+          </form>
+
+          <p class="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
+            Zaten bir hesabın var mı? <a id="show-login-btn" class="font-bold text-primary hover:underline cursor-pointer">Giriş Yap</a>
+          </p>
+        </div>
+
       </div>
-      <div class="row">
-        <label for="search">Ara</label>
-        <div class="input-wrap">
-          <i class="bi bi-search leading-icon" aria-hidden="true"></i>
-          <input id="search" placeholder="Ad, soyad veya telefon" />
-          <button id="clear-search" class="ghost" title="Temizle" aria-label="Temizle">
-            <i class="bi bi-x-circle"></i>
-          </button>
-        </div>
-      </div>
-      <table id="contacts-table">
-        <thead>
-          <tr>
-            <th>Ad</th>
-            <th>Soyad</th>
-            <th>Telefon</th>
-            <th>İşlemler</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <span>© <span id="year"></span> Mehmet Fatih Doğan — Rehber Uygulaması</span>
     </div>
-  </footer>
+  </div>
+
+  <!-- Admin Panel Screen -->
+  <div id="admin-screen" style="display: none;">
+    <header class="bg-white dark:bg-card-dark border-b border-slate-200 dark:border-slate-800 px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+            <i class="bi bi-shield-check-fill text-purple-600 dark:text-purple-400 text-3xl"></i>
+          </div>
+          <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Admin Panel</h1>
+        </div>
+        <div class="flex items-center gap-3">
+          <button id="admin-theme-toggle-btn" class="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors" title="Tema Değiştir">
+            <i id="admin-theme-icon" class="bi bi-moon-fill text-xl"></i>
+          </button>
+          <span id="admin-user-display" class="text-sm font-medium text-slate-700 dark:text-slate-300"></span>
+          <button id="back-to-app-btn" class="px-4 py-2 bg-primary/20 text-primary rounded-lg hover:bg-primary/30 transition-colors font-medium">
+            <i class="bi bi-arrow-left mr-2"></i>Rehbere Dön
+          </button>
+          <button id="admin-logout-btn" class="px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors font-medium">
+            <i class="bi bi-box-arrow-right mr-2"></i>Çıkış
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="p-6 max-w-7xl mx-auto space-y-6">
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white dark:bg-card-dark rounded-xl shadow-sm p-6 border border-slate-200 dark:border-slate-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-slate-500 dark:text-slate-400">Toplam Kullanıcı</p>
+              <p id="stat-total-users" class="text-3xl font-bold text-slate-900 dark:text-white mt-1">0</p>
+            </div>
+            <div class="p-3 bg-primary/20 rounded-lg">
+              <i class="bi bi-people text-primary text-2xl"></i>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white dark:bg-card-dark rounded-xl shadow-sm p-6 border border-slate-200 dark:border-slate-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-slate-500 dark:text-slate-400">Onay Bekleyen</p>
+              <p id="stat-pending-users" class="text-3xl font-bold text-orange-600 dark:text-orange-400 mt-1">0</p>
+            </div>
+            <div class="p-3 bg-orange-100 dark:bg-orange-900/30 rounded-lg">
+              <i class="bi bi-hourglass-split text-orange-600 dark:text-orange-400 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white dark:bg-card-dark rounded-xl shadow-sm p-6 border border-slate-200 dark:border-slate-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-slate-500 dark:text-slate-400">Onaylı</p>
+              <p id="stat-approved-users" class="text-3xl font-bold text-green-600 dark:text-green-400 mt-1">0</p>
+            </div>
+            <div class="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg">
+              <i class="bi bi-check-circle text-green-600 dark:text-green-400 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white dark:bg-card-dark rounded-xl shadow-sm p-6 border border-slate-200 dark:border-slate-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-slate-500 dark:text-slate-400">Toplam Kişi</p>
+              <p id="stat-total-contacts" class="text-3xl font-bold text-purple-600 dark:text-purple-400 mt-1">0</p>
+            </div>
+            <div class="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+              <i class="bi bi-person-vcard text-purple-600 dark:text-purple-400 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pending Users Section -->
+      <section class="bg-white dark:bg-card-dark rounded-xl shadow-sm p-6 border border-slate-200 dark:border-slate-700">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold text-slate-900 dark:text-white">Onay Bekleyen Kullanıcılar</h2>
+          <span id="pending-count-badge" class="px-3 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 rounded-full text-sm font-semibold">0</span>
+        </div>
+        <div id="pending-users-list" class="space-y-3">
+          <p class="text-center text-slate-500">Yükleniyor...</p>
+        </div>
+      </section>
+
+      <!-- All Users Section -->
+      <section class="bg-white dark:bg-card-dark rounded-xl shadow-sm p-6 border border-slate-200 dark:border-slate-700">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold text-slate-900 dark:text-white">Tüm Kullanıcılar</h2>
+          <span id="all-users-count-badge" class="px-3 py-1 bg-primary/20 text-primary rounded-full text-sm font-semibold">0</span>
+        </div>
+        <div class="mb-4">
+          <input id="user-search" class="w-full h-12 px-4 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/50 text-slate-900 dark:text-white placeholder:text-slate-400" placeholder="Kullanıcı ara..." />
+        </div>
+        <div id="all-users-list" class="space-y-3">
+          <p class="text-center text-slate-500">Yükleniyor...</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Main App Screen (Contacts) -->
+  <div id="app-screen" class="flex flex-col h-screen w-full" style="display: none;">
+    <!-- Top Header Bar -->
+    <header class="bg-white dark:bg-card-dark border-b border-slate-200 dark:border-slate-800 px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <div class="p-2 bg-primary/10 dark:bg-primary/20 rounded-lg">
+          <i class="bi bi-person-vcard-fill text-primary dark:text-primary text-2xl"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-bold text-slate-900 dark:text-white">Rehber</h1>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Kişilerinizi yönetin</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <span id="count-badge" class="px-3 py-1.5 bg-primary/20 text-primary rounded-full text-sm font-semibold">0 kişi</span>
+        <div class="flex items-center gap-3 px-4 py-2 bg-slate-50 dark:bg-slate-800 rounded-lg">
+          <i class="bi bi-person-circle text-slate-400 text-xl"></i>
+          <span id="user-name-display" class="text-sm font-medium text-slate-700 dark:text-slate-300"></span>
+        </div>
+        <button id="theme-toggle-btn" class="p-2.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors" title="Tema Değiştir">
+          <i id="theme-icon" class="bi bi-moon-fill text-xl text-slate-600 dark:text-slate-300"></i>
+        </button>
+        <button id="admin-panel-btn" class="px-4 py-2 bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-purple-900/30 rounded-lg transition-colors font-medium" style="display: none;" title="Admin Panel">
+          <i class="bi bi-shield-check mr-1.5"></i>Admin
+        </button>
+        <button id="logout-btn" class="px-4 py-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors font-medium" title="Çıkış Yap">
+          <i class="bi bi-box-arrow-right mr-1.5"></i>Çıkış
+        </button>
+      </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+      <main class="flex-1 p-6 sm:p-8 overflow-y-auto">
+
+      <!-- Search and Filter Bar -->
+      <div class="bg-white dark:bg-card-dark rounded-xl shadow-sm p-4 mb-6 border border-slate-200 dark:border-slate-700">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="relative">
+            <input id="search" class="w-full h-12 pl-12 pr-12 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/50 text-slate-900 dark:text-white placeholder:text-slate-400" placeholder="Kişi Ara..." type="text"/>
+            <i class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <button id="clear-search" class="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
+              <i class="bi bi-x-circle"></i>
+            </button>
+          </div>
+          <div class="relative">
+            <select id="category-filter" class="w-full h-12 pl-12 pr-4 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/50 text-slate-900 dark:text-white appearance-none">
+              <option value="">Tüm Kategoriler</option>
+            </select>
+            <i class="bi bi-funnel absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Form Card (Toggle) -->
+      <div id="contact-form-card" class="bg-white dark:bg-card-dark rounded-xl shadow-sm p-6 mb-6 border border-slate-200 dark:border-slate-700" style="display: none;">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold text-slate-900 dark:text-white">
+            <span id="form-title">Yeni Kişi Ekle</span>
+          </h2>
+          <button id="close-form-btn" class="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors">
+            <i class="bi bi-x-lg text-slate-500"></i>
+          </button>
+        </div>
+        <form id="contact-form" class="space-y-4">
+          <input type="hidden" id="contact-id" />
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label for="firstName" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Ad</label>
+              <input id="firstName" class="w-full h-12 px-4 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/50 text-slate-900 dark:text-white placeholder:text-slate-400" placeholder="Ad" autocomplete="off" required />
+            </div>
+            <div>
+              <label for="lastName" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Soyad</label>
+              <input id="lastName" class="w-full h-12 px-4 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/50 text-slate-900 dark:text-white placeholder:text-slate-400" placeholder="Soyad" autocomplete="off" required />
+            </div>
+          </div>
+          <div>
+            <label for="phone" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Telefon</label>
+            <input id="phone" class="w-full h-12 px-4 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/50 text-slate-900 dark:text-white placeholder:text-slate-400" placeholder="0xxx xxx xx xx" inputmode="numeric" autocomplete="off" required />
+            <p id="phone-hint" class="text-xs text-slate-500 dark:text-slate-400 mt-1">Sadece rakam giriniz. TR numarası olmalıdır.</p>
+          </div>
+          <div>
+            <label for="category" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Kategori (İsteğe bağlı)</label>
+            <input id="category" list="category-datalist" class="w-full h-12 px-4 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/50 text-slate-900 dark:text-white placeholder:text-slate-400" placeholder="Aile, Arkadaş, İş..." autocomplete="off" />
+            <datalist id="category-datalist"></datalist>
+          </div>
+          <div class="flex gap-3 pt-2">
+            <button id="save-btn" type="submit" class="flex-1 h-12 bg-primary hover:bg-primary/90 text-white rounded-lg font-semibold transition-colors flex items-center justify-center gap-2">
+              <i class="bi bi-check-lg"></i>
+              <span>Kaydet</span>
+            </button>
+            <button id="cancel-btn" type="button" class="h-12 px-6 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 rounded-lg font-semibold transition-colors">
+              İptal
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- File Upload Card (Toggle) -->
+      <div id="upload-card" class="bg-white dark:bg-card-dark rounded-xl shadow-sm p-6 mb-6 border border-slate-200 dark:border-slate-700" style="display: none;">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold text-slate-900 dark:text-white">Rehber Yükleme</h2>
+          <button id="close-upload-btn" class="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors">
+            <i class="bi bi-x-lg text-slate-500"></i>
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div>
+            <label for="file-upload" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Dosya Seç (CSV, VCF veya JSON)</label>
+            <input type="file" id="file-upload" accept=".csv,.vcf,.vcard,.json" class="w-full h-12 px-4 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/50 text-slate-900 dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-primary file:text-white file:cursor-pointer" />
+          </div>
+          <button id="upload-btn" type="button" class="w-full h-12 bg-primary hover:bg-primary/90 text-white rounded-lg font-semibold transition-colors flex items-center justify-center gap-2">
+            <i class="bi bi-upload"></i>
+            <span>Yükle</span>
+          </button>
+          <div id="upload-status" class="text-sm"></div>
+        </div>
+      </div>
+
+      <!-- Contacts List -->
+      <div id="contacts-list" class="space-y-3"></div>
+      <div id="empty-state" class="text-center py-16 text-slate-400 dark:text-slate-500" style="display: none;">
+        <i class="bi bi-inbox text-6xl mb-4 block"></i>
+        <p class="text-lg font-medium">Henüz kişi eklenmemiş</p>
+        <p class="text-sm mt-2">Yeni kişi eklemek için yan menüden "+" butonuna tıklayın</p>
+      </div>
+    </main>
+
+    <!-- Side Action Menu (Simplified) -->
+    <nav class="w-20 bg-white dark:bg-card-dark border-l border-slate-200 dark:border-slate-800 flex flex-col items-center py-8 gap-4">
+      <button id="show-add-form-btn" class="w-14 h-14 flex items-center justify-center bg-primary hover:bg-primary/90 text-white rounded-xl transition-all duration-200 shadow-sm hover:shadow-md" title="Kişi Ekle">
+        <i class="bi bi-person-plus text-2xl"></i>
+      </button>
+      <button id="show-upload-btn" class="w-14 h-14 flex items-center justify-center bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 rounded-xl transition-all duration-200" title="Dosya Yükle">
+        <i class="bi bi-upload text-2xl"></i>
+      </button>
+    </nav>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-card-dark border-t border-slate-200 dark:border-slate-800 px-6 py-3">
+      <div class="flex items-center justify-between text-sm">
+        <p class="text-slate-600 dark:text-slate-400">
+          © <span id="footer-year"></span> Mehmet Fatih Doğan — Rehber Uygulaması
+        </p>
+        <div class="flex items-center gap-4">
+          <a href="https://github.com/fatihdogann" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors">
+            <i class="bi bi-github text-lg"></i>
+            <span>GitHub</span>
+          </a>
+          <a href="https://linkedin.com/in/mehmetfatihdogann" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors">
+            <i class="bi bi-linkedin text-lg"></i>
+            <span>LinkedIn</span>
+          </a>
+        </div>
+      </div>
+    </footer>
+  </div>
 
   <script src="app.js"></script>
 </body>
