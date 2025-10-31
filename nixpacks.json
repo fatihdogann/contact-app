@@ -8,10 +8,10 @@
     }
   },
   "start": {
-    "cmd": "npm run start"
+    "cmd": "node src/server.js"
   },
   "variables": {
     "NODE_ENV": "production",
-    "NPM_CONFIG_PRODUCTION": "false"
+    "PORT": "3000"
   }
 }
