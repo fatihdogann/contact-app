@@ -755,6 +755,7 @@ function applyTheme(theme) {
   const html = document.documentElement;
   const themeIcon = document.getElementById('theme-icon');
   const adminThemeIcon = document.getElementById('admin-theme-icon');
+  const authThemeIcon = document.getElementById('auth-theme-icon');
   
   if (theme === 'auto') {
     // Auto theme based on time (6 AM - 6 PM = light, else dark)
@@ -764,20 +765,24 @@ function applyTheme(theme) {
     if (isDay) {
       html.classList.remove('dark');
       if (themeIcon) themeIcon.className = 'bi bi-moon-fill text-xl text-slate-600 dark:text-slate-300';
-      if (adminThemeIcon) adminThemeIcon.className = 'bi bi-moon-fill text-xl';
+      if (adminThemeIcon) adminThemeIcon.className = 'bi bi-moon-fill text-xl text-slate-600 dark:text-slate-300';
+      if (authThemeIcon) authThemeIcon.className = 'bi bi-moon-fill text-xl text-slate-600 dark:text-slate-300';
     } else {
       html.classList.add('dark');
       if (themeIcon) themeIcon.className = 'bi bi-sun-fill text-xl text-slate-600 dark:text-slate-300';
-      if (adminThemeIcon) adminThemeIcon.className = 'bi bi-sun-fill text-xl';
+      if (adminThemeIcon) adminThemeIcon.className = 'bi bi-sun-fill text-xl text-slate-600 dark:text-slate-300';
+      if (authThemeIcon) authThemeIcon.className = 'bi bi-sun-fill text-xl text-slate-600 dark:text-slate-300';
     }
   } else if (theme === 'dark') {
     html.classList.add('dark');
     if (themeIcon) themeIcon.className = 'bi bi-sun-fill text-xl text-slate-600 dark:text-slate-300';
-    if (adminThemeIcon) adminThemeIcon.className = 'bi bi-sun-fill text-xl';
+    if (adminThemeIcon) adminThemeIcon.className = 'bi bi-sun-fill text-xl text-slate-600 dark:text-slate-300';
+    if (authThemeIcon) authThemeIcon.className = 'bi bi-sun-fill text-xl text-slate-600 dark:text-slate-300';
   } else {
     html.classList.remove('dark');
     if (themeIcon) themeIcon.className = 'bi bi-moon-fill text-xl text-slate-600 dark:text-slate-300';
-    if (adminThemeIcon) adminThemeIcon.className = 'bi bi-moon-fill text-xl';
+    if (adminThemeIcon) adminThemeIcon.className = 'bi bi-moon-fill text-xl text-slate-600 dark:text-slate-300';
+    if (authThemeIcon) authThemeIcon.className = 'bi bi-moon-fill text-xl text-slate-600 dark:text-slate-300';
   }
 }
 
@@ -821,6 +826,7 @@ function showToast(message) {
 // Theme toggle buttons
 const themeToggleBtn = document.getElementById('theme-toggle-btn');
 const adminThemeToggleBtn = document.getElementById('admin-theme-toggle-btn');
+const authThemeToggleBtn = document.getElementById('auth-theme-toggle-btn');
 
 if (themeToggleBtn) {
   themeToggleBtn.addEventListener('click', cycleTheme);
@@ -828,6 +834,10 @@ if (themeToggleBtn) {
 
 if (adminThemeToggleBtn) {
   adminThemeToggleBtn.addEventListener('click', cycleTheme);
+}
+
+if (authThemeToggleBtn) {
+  authThemeToggleBtn.addEventListener('click', cycleTheme);
 }
 
 // Apply theme on load
@@ -852,7 +862,6 @@ function showAdminPanel() {
   if (currentUser) {
     els.adminUserDisplay.textContent = currentUser.fullName;
   }
-  document.getElementById('admin-year').textContent = new Date().getFullYear();
   loadAdminData();
 }
 
@@ -911,8 +920,18 @@ async function loadAdminStats() {
 // Load pending users
 async function loadPendingUsers() {
   try {
+    console.log('Loading pending users...');
     const res = await authFetch(`${ADMIN_API}/users/pending`);
+    console.log('Response status:', res.status);
+    
+    if (!res.ok) {
+      const errorData = await res.json();
+      console.error('Error loading pending users:', errorData);
+      throw new Error(errorData.error || 'Failed to load pending users');
+    }
+    
     const users = await res.json();
+    console.log('Pending users:', users);
     
     els.pendingCountBadge.textContent = users.length;
     
@@ -922,11 +941,11 @@ async function loadPendingUsers() {
     }
     
     els.pendingUsersList.innerHTML = users.map(user => `
-      <div class="user-card" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 12px; background: white;">
+      <div class="user-card bg-white dark:bg-card-dark" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
         <div style="display: flex; justify-content: space-between; align-items: start;">
           <div style="flex: 1;">
-            <h3 style="font-weight: 600; margin-bottom: 8px;">${escapeHtml(user.fullName)}</h3>
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 14px; color: #64748b;">
+            <h3 class="text-slate-900 dark:text-white" style="font-weight: 600; margin-bottom: 8px;">${escapeHtml(user.fullName)}</h3>
+            <div class="text-slate-600 dark:text-slate-400" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 14px;">
               <div><strong>E-posta:</strong> ${escapeHtml(user.email)}</div>
               <div><strong>Telefon:</strong> ${escapeHtml(user.phone)}</div>
               <div><strong>Yaş:</strong> ${user.age}</div>
@@ -934,15 +953,15 @@ async function loadPendingUsers() {
               <div><strong>İl:</strong> ${escapeHtml(user.province)}</div>
               <div><strong>İlçe:</strong> ${escapeHtml(user.district)}</div>
             </div>
-            <div style="margin-top: 8px; font-size: 12px; color: #94a3b8;">
+            <div class="text-slate-400 dark:text-slate-500" style="margin-top: 8px; font-size: 12px;">
               Kayıt: ${new Date(user.createdAt).toLocaleString('tr-TR')}
             </div>
           </div>
           <div style="display: flex; gap: 8px; margin-left: 16px;">
-            <button onclick="approveUser('${user.id}')" class="icon" style="background: #10b981; color: white; padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer;" title="Onayla">
+            <button onclick="approveUser('${user.id}')" class="icon" style="background: #10b981; color: white; padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer; font-weight: 500;" title="Onayla">
               <i class="bi bi-check-lg"></i> Onayla
             </button>
-            <button onclick="rejectUser('${user.id}')" class="icon danger" style="background: #ef4444; color: white; padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer;" title="Reddet">
+            <button onclick="rejectUser('${user.id}')" class="icon danger" style="background: #ef4444; color: white; padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer; font-weight: 500;" title="Reddet">
               <i class="bi bi-x-lg"></i> Reddet
             </button>
           </div>
@@ -951,7 +970,7 @@ async function loadPendingUsers() {
     `).join('');
   } catch (err) {
     console.error('Pending users error:', err);
-    els.pendingUsersList.innerHTML = '<p class="text-center text-red-500">Hata: ' + err.message + '</p>';
+    els.pendingUsersList.innerHTML = '<p class="text-center text-red-500">Hata: ' + escapeHtml(err.message) + '</p>';
   }
 }
 
@@ -1002,27 +1021,28 @@ function renderAllUsers(users) {
     // Real contact count
     const contactCount = contactCountsCache[user.id] || 0;
     
-    // Real storage data
-    const storageUsedBytes = user.storageUsed || 0;
+    // Calculate actual storage based on contact count (1KB per contact)
+    const actualStorageBytes = contactCount * 1024;
+    const storageUsedBytes = user.storageUsed || actualStorageBytes;
     const storageLimitBytes = user.storageLimit || (100 * 1024 * 1024); // 100 MB default
     const storageUsedMB = (storageUsedBytes / (1024 * 1024)).toFixed(2);
     const storageLimitMB = (storageLimitBytes / (1024 * 1024)).toFixed(0);
-    const storagePercent = (storageUsedBytes / storageLimitBytes) * 100;
+    const storagePercent = Math.min(100, (storageUsedBytes / storageLimitBytes) * 100);
     const storageColor = storagePercent > 80 ? '#ef4444' : storagePercent > 50 ? '#f59e0b' : '#10b981';
     
     return `
-      <div class="user-card" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 12px; background: white; cursor: pointer; transition: all 0.2s;" 
+      <div class="user-card bg-white dark:bg-card-dark border-slate-200 dark:border-slate-700" style="border: 1px solid; border-radius: 8px; padding: 16px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s;" 
            onmouseover="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.15)';" 
-           onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';"
+           onmouseout="this.classList.contains('dark') ? this.style.borderColor='#475569' : this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';"
            onclick="showUserContacts('${user.id}', '${escapeHtml(user.fullName)}')">
         <div style="display: flex; justify-content: space-between; align-items: start;">
           <div style="flex: 1;">
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-              <h3 style="font-weight: 600; margin: 0;">${escapeHtml(user.fullName)}</h3>
+              <h3 class="text-slate-900 dark:text-white" style="font-weight: 600; margin: 0;">${escapeHtml(user.fullName)}</h3>
               ${statusBadge}
               ${roleBadge}
             </div>
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 14px; color: #64748b;">
+            <div class="text-slate-600 dark:text-slate-400" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 14px;">
               <div><strong>E-posta:</strong> ${escapeHtml(user.email)}</div>
               <div><strong>Telefon:</strong> ${escapeHtml(user.phone)}</div>
               <div><strong>Yaş:</strong> ${user.age}</div>
@@ -1030,19 +1050,19 @@ function renderAllUsers(users) {
               <div><strong>İl:</strong> ${escapeHtml(user.province)}</div>
               <div><strong>İlçe:</strong> ${escapeHtml(user.district)}</div>
             </div>
-            <div style="margin-top: 10px; padding: 8px; background: #f1f5f9; border-radius: 6px; display: inline-block;">
-              <span style="font-size: 13px; color: #475569;"><strong>📇 Kişi Sayısı:</strong> <span style="color: #3b82f6; font-weight: 600;">${contactCount}</span></span>
+            <div class="bg-slate-100 dark:bg-slate-800" style="margin-top: 10px; padding: 8px; border-radius: 6px; display: inline-block;">
+              <span class="text-slate-700 dark:text-slate-300" style="font-size: 13px;"><strong>📇 Kişi Sayısı:</strong> <span style="color: #3b82f6; font-weight: 600;">${contactCount}</span></span>
             </div>
             <div style="margin-top: 12px;">
-              <div style="display: flex; justify-content: space-between; font-size: 12px; color: #64748b; margin-bottom: 4px;">
+              <div class="text-slate-600 dark:text-slate-400" style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
                 <span><strong>Depolama:</strong> ${storageUsedMB} MB / ${storageLimitMB} MB</span>
                 <span style="color: ${storageColor}; font-weight: 600;">${storagePercent.toFixed(1)}%</span>
               </div>
-              <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+              <div class="bg-slate-200 dark:bg-slate-700" style="width: 100%; height: 6px; border-radius: 3px; overflow: hidden;">
                 <div style="width: ${storagePercent}%; height: 100%; background: ${storageColor}; transition: width 0.3s;"></div>
               </div>
             </div>
-            <div style="margin-top: 8px; font-size: 12px; color: #94a3b8;">
+            <div class="text-slate-400 dark:text-slate-500" style="margin-top: 8px; font-size: 12px;">
               Kayıt: ${new Date(user.createdAt).toLocaleString('tr-TR')}
             </div>
           </div>
