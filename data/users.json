@@ -30,5 +30,22 @@
     "approved": true,
     "createdAt": "2025-10-30T20:12:31.197Z",
     "updatedAt": "2025-10-30T20:15:56.597Z"
+  },
+  {
+    "id": "f0e4e2e1-c00b-49e1-89dc-c4d33be37a9b",
+    "fullName": "Yurdagül Bakar",
+    "phone": "05464190368",
+    "email": "merakpesinde5@gmail.com",
+    "password": "$2b$10$t/680BdAdNtxM6kWWVyUHuaR1PtXeGsN3gY4cN23E57NJ9tUT9jLe",
+    "age": 21,
+    "province": "Aksaray",
+    "district": "Merkez",
+    "gender": "Kadın",
+    "role": "user",
+    "approved": true,
+    "storageLimit": 104857600,
+    "storageUsed": 0,
+    "createdAt": "2025-11-01T12:09:08.667Z",
+    "updatedAt": "2025-11-01T12:11:45.213Z"
   }
 ]
