@@ -108,7 +108,7 @@ MIT
 
 ## Geliştirici
 
-**Mehmet Fatih Doğan** — backend geliştirici, güvenlik meraklısı.
+**Mehmet Fatih Doğan** — yazılım geliştirici.
 
 - 🌐 Portfolyo & iletişim: [mehmetfatihdogan.com.tr](https://mehmetfatihdogan.com.tr)
 - 💻 GitHub: [@fatihdogann](https://github.com/fatihdogann)
