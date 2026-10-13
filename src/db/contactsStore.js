@@ -2,7 +2,7 @@ const fs = require('fs/promises');
 const path = require('path');
 const { randomUUID } = require('crypto');
 
-const dataDir = path.join(__dirname, '..', '..', 'data');
+const dataDir = process.env.DATA_DIR || path.join(__dirname, '..', '..', 'data');
 const dataFile = path.join(dataDir, 'contacts.json');
 
 async function ensureDataFile() {

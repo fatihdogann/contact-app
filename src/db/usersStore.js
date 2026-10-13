@@ -3,7 +3,7 @@ const path = require('path');
 const { randomUUID } = require('crypto');
 const bcrypt = require('bcryptjs');
 
-const dataDir = path.join(__dirname, '..', '..', 'data');
+const dataDir = process.env.DATA_DIR || path.join(__dirname, '..', '..', 'data');
 const dataFile = path.join(dataDir, 'users.json');
 
 async function ensureDataFile() {

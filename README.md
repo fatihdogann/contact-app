@@ -16,14 +16,14 @@ Minimal, dosya tabanlı (JSON) depolama kullanan bir rehber (kişiler) uygulamas
 - Frontend: `public/` (Tailwind CDN, basit JS)
 
 ## Hızlı Başlangıç
-- Gereksinimler: Node.js 18+
+- Gereksinimler: Node.js 22+
 
 1) Bağımlılıkları yükle
 ```
 npm install
 ```
 
-2) Geliştirme modunda başlat (hot-reload için `nodemon`)
+2) Geliştirme modunda başlat (Node.js'in yerleşik dosya izleme özelliği)
 ```
 npm run dev
 ```
@@ -47,7 +47,7 @@ npm start
 ```
 
 ## Komutlar
-- `npm run dev`: Nodemon ile geliştirme sunucusu
+- `npm run dev`: Node.js dosya izleme ile geliştirme sunucusu
 - `npm start`: Node ile sunucu
 
 ## API Özeti
@@ -100,6 +100,17 @@ data/
 - CORS şu an geniş; prod’da kısıtlayın.
 - Rate limit, audit log vb. yok; ihtiyaca göre ekleyin.
 - Dosya tabanlı depolama küçük projeler için uygundur; prod için veritabanı önerilir.
+
+## Doğrulama
+
+```bash
+npm ci
+npm test
+```
+
+CI; API sağlık kontrolünü, giriş/onay sınırlarını, kişi oluşturma/arama/güncelleme/
+silme akışını ve kullanıcılar arasındaki veri ayrımını sınar. Testler geçici bir
+`DATA_DIR` kullanır; mevcut `data/` kayıtlarına yazmaz.
 
 ## Lisans
 MIT
