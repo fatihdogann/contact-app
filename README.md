@@ -9,6 +9,18 @@ Minimal, dosya tabanlı (JSON) depolama kullanan bir rehber (kişiler) uygulamas
 - Sağlık kontrolü (`/health`) ve statik frontend (Tailwind + vanilla JS)
 - JSON dosyalarıyla kalıcı depolama (`data/` klasörü)
 
+## Ekran görüntüleri
+
+Çekimler, uygulamanın yerel kurulumunda örnek kayıtlarla alındı.
+
+**Rehber** — Kişi listesi, arama ve kategori filtresi.
+
+![Örnek kişiler ve kategori filtresiyle Contact App rehber ekranı](docs/screenshots/rehber.webp)
+
+**Kişi ekleme** — Ad, soyad, telefon ve kategori alanları.
+
+![Contact App kişi ekleme formu](docs/screenshots/kisi-ekleme.webp)
+
 ## Teknolojiler
 - `Node.js`, `Express`, `cors`
 - `jsonwebtoken` (JWT), `bcryptjs` (şifre hashleme)
