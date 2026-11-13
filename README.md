@@ -50,6 +50,8 @@ npm start
 - Frontend: `http://localhost:3000/`
 
 ## Ortam Değişkenleri
+- `PORT` ve `NODE_ENV`: HTTP portu ve çalışma ortamı. Varsayılan port `3000`.
+- `DATA_DIR`: JSON dosyalarının tutulacağı dizin. Boşsa proje içindeki `data/` kullanılır.
 - `JWT_SECRET`: JWT imzalama anahtarı. Dev ortamında varsayılan bir değer kullanılır; prod’da mutlaka güçlü bir değer verin.
 
 Windows PowerShell örneği:
